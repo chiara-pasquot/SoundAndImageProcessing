@@ -1,0 +1,62 @@
+//https://editor.p5js.org/chiara.pasquot/sketches/j9yhkkDKm
+
+let particles = [];
+
+class Particle {
+  constructor(x, y) {
+    this.pos = createVector(x, y);
+    this.vel = createVector(random(-0.3, 0.3), random(-0.3, 0.3));
+    this.diam = random(6, 13);
+    this.colour = random(180, 255);
+  }
+
+  update() {
+    this.pos.add(this.vel);
+    let rad = this.diam / 2;
+
+    if (this.pos.x <= rad || this.pos.x >= width - rad) {
+      this.vel.x *= -1;
+    }
+
+    if (this.pos.y <= rad || this.pos.y >= height - rad) {
+      this.vel.y *= -1;
+    }
+  }
+
+  draw() {
+    noStroke();
+    fill(this.colour);
+    ellipse(this.pos.x, this.pos.y, this.diam, this.diam);
+  }
+
+  checkParticles(particles) {
+    particles.forEach(particle => {
+      const d = dist(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y);
+      if (d < 80) {
+        let alpha = map(d, 0, 80, 0, 0.05)
+        stroke(this.colour);
+        strokeWeight(0.3);
+        line(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y)
+      }
+    });
+  }
+}
+
+
+function setup() {
+  createCanvas(500, 500);
+  for (let i = 0; i < 60; i++) {
+    let particle = new Particle(random(width), random(height));
+    particles.push(particle);
+  }
+}
+
+function draw() {
+  background(29, 53, 87);
+
+  particles.forEach((particle, index) => {
+    particle.update();
+    particle.draw();
+    particle.checkParticles(particles.slice(index));
+  });
+}
