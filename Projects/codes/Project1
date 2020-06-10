@@ -1,0 +1,21 @@
+//https://editor.p5js.org/chiara.pasquot/sketches/7OcdfMhLh
+
+function setup(){
+  pixelDensity(1); 
+  createCanvas(400,400);
+}
+function draw() {
+      background(51);
+
+      loadPixels();
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          let index = (x + y * width)*4;
+          pixels[index+0] = x - random(255);
+          pixels[index+1] = mouseY;
+          pixels[index+2] = mouseX;
+          pixels[index+3] = random(255);      
+        }
+      }
+      updatePixels();
+    }
