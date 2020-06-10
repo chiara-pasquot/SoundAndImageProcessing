@@ -1,0 +1,54 @@
+//https://editor.p5js.org/chiara.pasquot/sketches/NR1HUd5kL
+//The game is simple: Where is Waldo??
+
+
+
+let img, originalPixels
+
+function preload() {
+  img = loadImage('WhereSWaldo2.jpg')
+}
+
+function setup() {
+  createCanvas(500, 500);
+  img.loadPixels();
+  originalPixels = img.pixels.slice()
+  background(100);
+ 
+  
+}
+
+function draw() {
+  img.loadPixels()
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      let index = (y * width + x) * 4
+      let [r, g, b] = originalPixels.slice(index, index + 3)
+
+      let d = (100 - dist(x, y, mouseX, mouseY) * 1) / 90
+      
+      img.pixels[index] = r * d ;
+      img.pixels[index +1] = g * d;
+      img.pixels[index +2] = b * d;
+    }
+  }
+
+  img.updatePixels()
+
+  image(img, 0, 0)
+  foundHim();
+}
+
+function foundHim() {
+  let radius = 25;
+  let x2 = 450;
+  let y2 = 70;
+  let distance = dist(mouseX, mouseY, x2, y2);
+    if (distance < radius-10) {
+    fill(0,255,0)
+    noStroke()
+    ellipse(x2,y2,radius) 
+  }
+}
+
