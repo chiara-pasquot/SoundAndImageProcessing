@@ -1,0 +1,67 @@
+//https://editor.p5js.org/chiara.pasquot/sketches/FsniU8mEB
+
+let judith;
+
+function preload() {
+  judith = loadImage('judith.jpg');
+  
+}
+
+function setup() {
+  createCanvas(370, 700);
+  let kernel = [
+    [-1, -1, -1],
+    [-1, 8.2, -1],
+    [-1, -1, -1]
+  ]
+
+  let newJudith = convolve(judith, kernel)
+  image(newJudith, 0, 0)
+}
+
+function convolvePixel(x, y, img, kernel) {
+  let output = 0
+
+  let kernelSize = kernel.length
+  let kernelRadius = floor(kernelSize / 2)
+
+  for (let j = -kernelRadius; j <= kernelRadius; j++) {
+    for (let i = -kernelRadius; i <= kernelRadius; i++) {
+
+      let kernelX = kernelSize - (i + kernelRadius) - 1
+      let kernelY = kernelSize - (j + kernelRadius) - 1
+
+      let px = x + i
+      let py = y + j
+      let pixelIndex = (px + py * width) * 4
+      output += img.pixels[pixelIndex] * kernel[kernelY][kernelX]
+    }
+  }
+  return output
+}
+
+function convolve(img, kernel) {
+  let output = createImage(img.width, img.height)
+
+  img.loadPixels()
+  output.loadPixels()
+
+  for (let y = 1; y < img.height - 1; y++) {
+    for (let x = 1; x < img.width - 1; x++) {
+      let index = (x + y * img.width) * 4
+      let result = 0
+
+      result = convolvePixel(x, y, img, kernel)
+
+      output.pixels[index] = result
+      output.pixels[index + 1] = result
+      output.pixels[index + 2] = result
+      output.pixels[index + 3] = 255
+
+    }
+  }
+
+  output.updatePixels()
+
+  return output
+}
