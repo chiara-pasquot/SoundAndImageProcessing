@@ -1,0 +1,44 @@
+//https://editor.p5js.org/chiara.pasquot/sketches/fxPFwAEm_
+let theta;
+
+function setup() {
+  createCanvas(710, 400);
+}
+
+function draw() {
+  background(255);
+  frameRate(30);
+  stroke(0);
+  strokeWeight(7);
+  let a = 30;
+  theta = radians(a);
+  
+  translate(width/2,height);
+  line(0,0,0,-80);
+  translate(0,-80);
+  branch(80);
+
+}
+
+function branch(h) {
+  stroke(50,250-h/0.25,50);
+  strokeWeight(h/15);
+  h *= 0.8;
+
+  if (h > 2) {
+    // right branches
+    push();    
+    rotate(theta);   
+    line(0, 0, 0, -h);  
+    translate(0, -h); 
+    branch(h);       
+    pop();     
+    //left branches
+    push();
+    rotate(-theta);
+    line(0, 0, 0, -h);
+    translate(0, -h);
+    branch(h);
+    pop();
+  }
+}
